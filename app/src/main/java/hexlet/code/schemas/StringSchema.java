@@ -2,7 +2,7 @@ package hexlet.code.schemas;
 
 public final class StringSchema extends BaseSchema<String> {
     private boolean isRequired = false;
-    private int minLength = 0;
+    private Integer minLength = 0;
     private String text = "";
 
     @Override
@@ -26,12 +26,12 @@ public final class StringSchema extends BaseSchema<String> {
     }
 
     public StringSchema minLength(int length) {
-        minLength = length;
+        this.minLength = length;
         return this;
     }
 
     public StringSchema contains(String substring) {
-        text = substring;
+        this.text = substring;
         return this;
     }
 

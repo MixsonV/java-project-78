@@ -3,6 +3,8 @@ package hexlet.code;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
 
+import java.util.HashMap;
+
 public class App {
     // для примера
     private static final int STRING_MAGIC_NUMBER_1 = 10;
@@ -15,7 +17,7 @@ public class App {
 
     public static void main(String[] args) {
         // пример StringSchema
-        System.out.println("StringSchema:");
+        System.out.println("\nStringSchema:");
         Validator v1 = new Validator();
         StringSchema string = v1.string();
 
@@ -40,7 +42,7 @@ public class App {
                 .isValid("Hexlet")); // true
 
         // пример NumberSchema
-        System.out.println("NumberSchema:");
+        System.out.println("\nNumberSchema:");
 
         Validator v2 = new Validator();
         NumberSchema number = v2.number();
@@ -64,5 +66,28 @@ public class App {
         System.out.println(number.isValid(NUMBER_MAGIC_NUMBER_2)); // true
         System.out.println(number.isValid(NUMBER_MAGIC_NUMBER_4)); // false
         System.out.println(number.isValid(NUMBER_MAGIC_NUMBER_5)); // false
+
+        // пример MapSchema
+        System.out.println("\nMapSchema:");
+        var v3 = new Validator();
+
+        var map = v3.map();
+
+        System.out.println(map.isValid(null)); // true
+
+        System.out.println(map.required());
+
+        System.out.println(map.isValid(null)); // false
+        System.out.println(map.isValid(new HashMap<>())); // true
+        var data = new HashMap<String, String>();
+        data.put("key1", "value1");
+        System.out.println(map.isValid(data)); // true
+
+        System.out.println(map.sizeof(2));
+
+        System.out.println(map.isValid(data));  // false
+        data.put("key2", "value2");
+        System.out.println(map.isValid(data)); // true
     }
+
 }

@@ -1,18 +1,23 @@
 package hexlet.code;
 
+import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestSchema {
-    private static final int MAGIC_NUMBER_1 = 4;
-    private static final int MAGIC_NUMBER_2 = 10;
-    private static final int MAGIC_NUMBER_3 = -10;
-    private static final int MAGIC_NUMBER_4 = -100;
-    private static final int MAGIC_NUMBER_5 = 100;
+    private static final Integer MAGIC_NUMBER_NEGATIVE_100 = -100;
+    private static final Integer MAGIC_NUMBER_NEGATIVE_10 = -10;
+    private static final Integer MAGIC_NUMBER_2 = 2;
+    private static final Integer MAGIC_NUMBER_4 = 4;
+    private static final Integer MAGIC_NUMBER_10 = 10;
+    private static final Integer MAGIC_NUMBER_100 = 100;
 
     @Test
     void testStringSchemaNullEmpty() {
@@ -27,8 +32,8 @@ public class TestSchema {
     @Test
     void testStringSchemaLength() {
         StringSchema schema = new StringSchema();
-        assertTrue(schema.minLength(MAGIC_NUMBER_1).isValid("Hexlet"));
-        assertFalse(schema.minLength(MAGIC_NUMBER_2).isValid("Hexlet"));
+        assertTrue(schema.minLength(MAGIC_NUMBER_4).isValid("Hexlet"));
+        assertFalse(schema.minLength(MAGIC_NUMBER_10).isValid("Hexlet"));
     }
 
     @Test
@@ -42,32 +47,56 @@ public class TestSchema {
     void testNumberSchemaNullEmpty() {
         NumberSchema schema = new NumberSchema();
         assertTrue(schema.isValid(null));
-        assertTrue(schema.isValid(MAGIC_NUMBER_1));
+        assertTrue(schema.isValid(MAGIC_NUMBER_4));
         schema.required();
         assertFalse(schema.isValid(null));
-        assertTrue(schema.isValid(MAGIC_NUMBER_1));
+        assertTrue(schema.isValid(MAGIC_NUMBER_4));
     }
 
     @Test
     void testNumberSchemaPositive() {
         NumberSchema schema = new NumberSchema();
-        assertTrue(schema.isValid(MAGIC_NUMBER_3));
+        assertTrue(schema.isValid(MAGIC_NUMBER_NEGATIVE_10));
         assertTrue(schema.isValid(0));
-        assertTrue(schema.isValid(MAGIC_NUMBER_2));
+        assertTrue(schema.isValid(MAGIC_NUMBER_10));
         schema.positive();
-        assertFalse(schema.isValid(MAGIC_NUMBER_3));
+        assertFalse(schema.isValid(MAGIC_NUMBER_NEGATIVE_10));
         assertFalse(schema.isValid(0));
-        assertTrue(schema.isValid(MAGIC_NUMBER_2));
+        assertTrue(schema.isValid(MAGIC_NUMBER_10));
     }
 
     @Test
     void testNumberSchemaRange() {
         NumberSchema schema = new NumberSchema();
-        assertTrue(schema.isValid(MAGIC_NUMBER_2));
-        assertTrue(schema.range(MAGIC_NUMBER_3, MAGIC_NUMBER_2).isValid(MAGIC_NUMBER_3));
-        assertTrue(schema.range(MAGIC_NUMBER_3, MAGIC_NUMBER_2).isValid(MAGIC_NUMBER_1));
-        assertTrue(schema.range(MAGIC_NUMBER_3, MAGIC_NUMBER_2).isValid(MAGIC_NUMBER_2));
-        assertFalse(schema.range(MAGIC_NUMBER_3, MAGIC_NUMBER_2).isValid(MAGIC_NUMBER_4));
-        assertFalse(schema.range(MAGIC_NUMBER_3, MAGIC_NUMBER_2).isValid(MAGIC_NUMBER_5));
+        assertTrue(schema.isValid(MAGIC_NUMBER_10));
+        assertTrue(schema.range(MAGIC_NUMBER_NEGATIVE_10, MAGIC_NUMBER_10).isValid(MAGIC_NUMBER_NEGATIVE_10));
+        assertTrue(schema.range(MAGIC_NUMBER_NEGATIVE_10, MAGIC_NUMBER_10).isValid(MAGIC_NUMBER_4));
+        assertTrue(schema.range(MAGIC_NUMBER_NEGATIVE_10, MAGIC_NUMBER_10).isValid(MAGIC_NUMBER_10));
+        assertFalse(schema.range(MAGIC_NUMBER_NEGATIVE_10, MAGIC_NUMBER_10).isValid(MAGIC_NUMBER_NEGATIVE_100));
+        assertFalse(schema.range(MAGIC_NUMBER_NEGATIVE_10, MAGIC_NUMBER_10).isValid(MAGIC_NUMBER_100));
     }
+
+    @Test
+    void testMapSchemaNullEmpty() {
+        MapSchema schema = new MapSchema();
+        Map<String, String> testedMap = new HashMap<>();
+        assertTrue(schema.isValid(null));
+        assertTrue(schema.isValid(testedMap));
+        schema.required();
+        assertFalse(schema.isValid(null));
+        assertTrue(schema.isValid(testedMap));
+    }
+
+    @Test
+    void testMapSchemaSizeof() {
+        MapSchema schema = new MapSchema();
+        Map<String, String> testedMap = Map.of(
+                "key1", "value1",
+                "key2", "value2"
+        );
+        assertTrue(schema.isValid(testedMap));
+        assertTrue(schema.sizeof(MAGIC_NUMBER_2).isValid(testedMap));
+        assertFalse(schema.sizeof(MAGIC_NUMBER_4).isValid(testedMap));
+    }
+
 }
