@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.MapSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
@@ -97,6 +98,31 @@ public class TestSchema {
         assertTrue(schema.isValid(testedMap));
         assertTrue(schema.sizeof(MAGIC_NUMBER_2).isValid(testedMap));
         assertFalse(schema.sizeof(MAGIC_NUMBER_4).isValid(testedMap));
+    }
+
+    @Test
+    void testMapSchemaShape() {
+        MapSchema schemaMap = new MapSchema();
+        StringSchema schemaString = new StringSchema();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", schemaString.required());
+        schemas.put("lastName", schemaString.required().minLength(MAGIC_NUMBER_2));
+        schemaMap.shape(schemas);
+
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        assertTrue(schemaMap.isValid(human1));
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        assertFalse(schemaMap.isValid(human2));
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        assertFalse(schemaMap.isValid(human3));
     }
 
 }

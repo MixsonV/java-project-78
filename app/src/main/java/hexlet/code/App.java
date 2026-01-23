@@ -1,9 +1,11 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import hexlet.code.schemas.NumberSchema;
 import hexlet.code.schemas.StringSchema;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class App {
     // для примера
@@ -88,6 +90,34 @@ public class App {
         System.out.println(map.isValid(data));  // false
         data.put("key2", "value2");
         System.out.println(map.isValid(data)); // true
+
+        // пример MapSchema
+        System.out.println("\nMapSchema by shape:");
+        var v4 = new Validator();
+
+        var mapShape = v4.map();
+
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+
+        schemas.put("firstName", v4.string().required());
+        schemas.put("lastName", v4.string().required().minLength(2));
+
+        mapShape.shape(schemas);
+
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        System.out.println(mapShape.isValid(human1)); // true
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        System.out.println(mapShape.isValid(human2)); // false
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        System.out.println(mapShape.isValid(human3)); // false
     }
 
 }
