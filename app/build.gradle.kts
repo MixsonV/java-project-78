@@ -1,7 +1,7 @@
 plugins {
     id("com.github.ben-manes.versions") version "0.53.0"
     id("org.sonarqube") version "7.2.2.6593"
-    application
+    id("java")
     checkstyle
 }
 
@@ -10,10 +10,6 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
-}
-
-application {
-    mainClass = "hexlet.code.App"
 }
 
 dependencies {
