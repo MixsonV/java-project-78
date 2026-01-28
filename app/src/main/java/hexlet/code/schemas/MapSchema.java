@@ -1,12 +1,13 @@
 package hexlet.code.schemas;
 
 import java.util.Map;
+import java.util.Objects;
 
 public final class MapSchema extends BaseSchema<Map<String, String>> {
-    private Map<String, BaseSchema<String>> shapeSchemas = Map.of();
+    private Map<String, BaseSchema<String>> shapeSchemas;
 
     public MapSchema required() {
-        addCheck("required", value -> value != null);
+        addCheck("required", Objects::nonNull);
         return this;
     }
 
@@ -18,7 +19,7 @@ public final class MapSchema extends BaseSchema<Map<String, String>> {
     public MapSchema shape(Map<String, BaseSchema<String>> schemas) {
         this.shapeSchemas = schemas;
         addCheck("shape", value -> {
-            if (value == null) {
+            if (value == null || shapeSchemas.isEmpty()) {
                 return true;
             }
             for (var entry : shapeSchemas.entrySet()) {

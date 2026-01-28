@@ -12,7 +12,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TestSchema {
+class TestSchema {
     private static final Integer MAGIC_NUMBER_NEGATIVE_100 = -100;
     private static final Integer MAGIC_NUMBER_NEGATIVE_10 = -10;
     private static final Integer MAGIC_NUMBER_2 = 2;
